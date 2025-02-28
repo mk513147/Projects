@@ -1,0 +1,157 @@
+/* Fallback CSS for Tailwind-like styles */
+
+/* General Reset */
+body {
+    background-color: #0f172a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    -webkit-scrollbar-width: none;
+    scrollbar-width: none;
+  }
+
+/* Header */
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    margin: 5rem 0;
+}
+
+/* Main Content */
+main, .tableContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+
+
+/* Table */
+.table-auto {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0.75rem;
+    border: 1px solid white;
+    text-align: center;
+}
+
+td:hover{
+    background-color: #1e293b;
+}
+
+th {
+    background-color: #1e293b;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 0.75rem;
+    border: 1px solid white;
+    text-align: left;
+}
+
+tbody {
+    background-color: #111827;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    width: 100%;
+}
+
+/* Buttons */
+.formButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 20px;
+}
+
+button {
+    background-color: rgba(226, 232, 240, 0.2);
+    width: 10rem;
+    height: 3rem;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: rgba(226, 232, 240, 0.3);
+}
+
+/* Modal */
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+#modal.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+input, select {
+    background-color: #1e293b;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* fail msg */
+
+.failMsg{
+    color: white;
+    text-decoration: underline;
+    font-size: larger;
+}

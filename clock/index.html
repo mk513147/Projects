@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body
+    class="bg-gray-900 text-white flex flex-col justify-center items-center"
+  >
+    <header>
+      <div class="flex justify-center items-center m-3">
+        <a
+          href="../index.html"
+          class="hover:bg-indigo-400/60 bg-indigo-500 align-middle shadow-md p-3 rounded-lg text-2xl text-center bg-blend-color"
+          >Home</a
+        >
+      </div>
+    </header>
+    <main>
+        <!-- Analog clock -->
+      <div id="clock-container" class="mt-8">
+        <div id="hour"></div>
+        <div id="minute"></div>
+        <div id="second"></div>
+      </div>
+      <!-- Digital Clock -->
+      <div class="flex flex-col justify-center mt-8 items-center gap-2">
+        <p
+          id="time"
+          class="p-3 text-xl bg-amber-500 text-white text-center rounded-md"
+        ></p>
+      </div>
+    </main>
+  </body>
+  <script>
+    let time = document.getElementById('time')
+
+    setInterval(function () {
+      let date = new Date();
+      time.innerText = date.toLocaleTimeString()
+    }, 1000)
+
+    //For Analog Clock
+    setInterval(() => {
+    let d = new Date();
+    htime = d.getHours();
+    mtime = d.getMinutes();
+    stime = d.getSeconds();
+    // mstime = d.getMilliseconds();
+
+    hrotation = 30 * htime + mtime/2;// hour hand rotation
+    mrotation = 6 * mtime ;// minute hand rotation
+    srotation = 6 * stime ;// second hand rotation
+    // msrotation = (36/100) * mstime  ;// millisecond rotation
+
+    hour.style.transform = ` rotate(${hrotation}deg)`;
+    minute.style.transform = ` rotate(${mrotation}deg)`;
+    second.style.transform = ` rotate(${srotation}deg)`;
+    // millisec.style.transform = ` rotate(${msrotation}deg)`;
+}, 1000);
+  </script>
+</html>

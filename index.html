@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Js Projects</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+      .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    -webkit-scrollbar-width: none;
+    scrollbar-width: none;
+  }
+
+    </style>
+  </head>
+  <body
+    class="bg-gray-950 text-white flex items-center h-screen w-screen flex-col"
+  >
+    <header>
+      <h1 class="text-6xl text-center m-20">Javascript Projects</h1>
+    </header>
+    <main>
+      <div class="flex flex-col justify-center items-center gap-2 tableContainer">
+        <div class="max-h-96 w-xl overflow-y-auto scrollbar-hidden rounded-md">
+          <table class="table-auto w-full border-collapse ">
+            <thead class="sticky top-0 bg-gray-800 text-white drop-shadow-md">
+              <tr>
+                <th class="p-3">Project No.</th>
+                <th class="p-3">Project Name</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Edit/Delete</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="bg-gray-900"></tbody>
+          </table>
+        </div>
+        <button
+          type="button"
+          class="bg-slate-200/40 w-40 h-12 mt-5 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/30"
+          id="openModal"
+        >
+          Add Projects
+        </button>
+
+        <div
+          id="modal"
+          class="hidden fixed top-0 left-0 w-screen h-screen bg-black/50 flex justify-center items-center backdrop-blur-xs transition-all duration-300 opacity-0 scale-90"
+          >
+          <form
+            class="flex justify-center items-center mt-2 gap-2 flex-col p-8 bg-white/20 rounded-lg gap-5 "
+            id="form"
+          >
+            <p class="grid grid-cols-3 items-center gap-4 w-full justify-start">
+              <label for="project" class="text-white text-left"
+                >Project Name:</label
+              >
+              <input
+                type="text"
+                id="project"
+                class="border-b-2 outline-0 bg-gray-800 rounded-lg p-2 text-white w-full col-span-2"
+                autocomplete="off"
+                placeholder="Enter project name"
+              />
+            </p>
+
+            <p class="grid grid-cols-3 items-center gap-4 w-full justify-start">
+              <label for="link" class="text-white text-left"
+                >Project Link:</label
+              >
+              <input type="file" id="link" class="hidden" accept=".html" />
+              <label
+                for="link"
+                class="border-b-2 outline-0 bg-gray-800 rounded-lg p-2 text-white cursor-pointer"
+              >
+                Select File
+              </label>
+              <input
+                type="text"
+                id="fileOutput"
+                class="border-b-2 outline-0 bg-gray-800 rounded-lg p-2 text-white w-full"
+                readonly
+                placeholder="No file selected"
+              />
+          </p>
+
+            <p class="grid grid-cols-2 items-center gap-4 w-full justify-start">
+              <label for="status" class="text-white text-left"
+                >Project Status:</label
+              >
+              <select
+                id="status"
+                class="border-b-2 outline-0 bg-gray-800 rounded-lg p-2 text-white w-full"
+              >
+                <option value="completed">✅ Completed</option>
+                <option value="working">✏️ Working</option>
+                <option value="optimization">✨ Optimization Needed</option>
+              </select>
+            </p>
+            <div class="flex justify-center items-center gap-5 mt-5 formButtons">
+              <button
+                type="submit"
+                class="bg-slate-200/40 w-40 h-12 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/20"
+                id="addButton"
+              >
+                Add
+              </button>
+              <button
+                type="button"
+                id="closeButton"
+                class="bg-slate-200/40 w-40 h-12 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/20"
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <h2 class="failMsg"></h2>
+    </footer>
+  </body>
+  <script src="./scripts.js"></script>
+</html>

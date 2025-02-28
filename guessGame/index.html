@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guess Game</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body
+    class="bg-gray-900 text-white flex flex-col justify-center items-center"
+  >
+    <header class="flex flex-col justify-center items-center gap-2">
+      <div class="flex justify-center items-center m-3">
+        <a
+          href="../index.html"
+          class="hover:bg-indigo-400/60 bg-indigo-500 align-middle shadow-md p-3 rounded-lg text-2xl text-center bg-blend-color"
+          >Home</a
+        >
+      </div>
+
+      <!-- Toggle Switch -->
+       <div class="flex flex-col justify-center items-center gap-1">
+      <span id="toggleLabel" class="text-lg font-semibold">Try Me:</span>
+      <label class="relative flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          id="toggleSwitch"
+          class="sr-only peer"
+          title="Toggle Switch"
+        />
+        <div
+          class="w-14 h-8 bg-gray-400 rounded-full peer-checked:bg-fuchsia-800 transition-all duration-300"
+        ></div>
+        <div
+          class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-6 transition-all duration-300"
+        ></div>
+      </label>
+      </div>
+    </header>
+    <main class="flex flex-col justify-center items-center">
+      <h1 id="heading" class="text-6xl text-center m-20">GUESS GAME</h1>
+      <form id="myForm" class="flex flex-col justify-center items-center gap-2">
+        <p class="p-3">
+          <label for="userInput">Enter a number between 1 - 100</label>
+          <input
+            type="text"
+            id="userInput"
+            class="border-b-2 outline-0 ml-2 bg-gray-800 rounded-lg pl-2 pt-1"
+            autocomplete="off"
+          />
+        </p>
+        <button
+          type="submit"
+          id="button"
+          class="bg-slate-200/40 p-2 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/20"
+        >
+          Guess
+        </button>
+      </form>
+    </main>
+    <footer>
+      <div
+        id="results"
+        class="flex flex-col justify-center items-center p-4 gap-2 text-lg font-semibold"
+      >
+        <p class="text-xl text-center p-2 resultPara">
+          Previous Guesses: <span id="guesses"></span>
+        </p>
+        <p class="text-xl text-center p-2 resultPara">
+          Turns Left: <span id="chances"></span>
+        </p>
+        <p id="comment" class="text-xl text-center p-3 h-14"></p>
+      </div>
+    </footer>
+  </body>
+  <script src="./scripts.js"></script>
+</html>

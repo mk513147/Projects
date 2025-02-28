@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BMI Calculator</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body
+    class="bg-gray-900 text-white flex flex-col justify-center items-center"
+  >
+    <header>
+      <div class="flex justify-center items-center m-3">
+        <a
+          href="../index.html"
+          class="hover:bg-indigo-400/60 bg-indigo-500 align-middle shadow-md p-3 rounded-lg text-2xl text-center bg-blend-color"
+          >Home</a
+        >
+      </div>
+    </header>
+    <main class="flex flex-col justify-center items-center">
+      <h1 class="text-6xl text-center m-20">BMI CALCULATOR</h1>
+      <form id="myForm" class="flex flex-col justify-center items-center gap-2">
+        <p class="p-3">
+          <label for="height">Enter Height in cm:</label>
+          <input
+            type="text"
+            id="height"
+            class="border-b-2 outline-0 ml-2 bg-gray-800 rounded-lg pl-2 pt-1 "
+            autocomplete="off"
+          />
+        </p>
+        <p class="p-3">
+          <label for="weight">Enter Weight in kg:</label>
+          <input
+            type="text"
+            id="weight"
+            class="border-b-2 outline-0 ml-2 bg-gray-800 rounded-lg pl-2 pt-1"
+            autocomplete="off"
+          />
+        </p>
+        <button
+          type="submit"
+          id="button"
+          class="bg-slate-200/40 p-2 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/20"
+        >
+          Calculate
+        </button>
+      </form>
+    </main>
+    <footer>
+      <div id="results" class="text-xl text-center p-3 underline h-14"></div>
+      <div
+        id="weight-guide"
+        class="flex flex-col justify-center items-center p-4 gap-2 text-lg font-semibold"
+      >
+        <h3 class="text-xl font-bold">BMI Weight Guide:</h3>
+        <div class="w-80 flex justify-between">
+          <span>Under Weight</span> <span>Less than 18.6</span>
+        </div>
+        <div class="w-80 flex justify-between">
+          <span>Normal Range</span> <span>18.6 - 24.9</span>
+        </div>
+        <div class="w-80 flex justify-between">
+          <span>Overweight</span> <span>Greater than 24.9</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    const height = document.querySelector('#height')
+    const weight = document.querySelector('#weight')
+    const button = document.querySelector('#button')
+    const results = document.querySelector('#results')
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const heightValue = parseFloat(height.value)
+      const weightValue = parseFloat(weight.value)
+
+      if (
+        isNaN(heightValue) ||
+        isNaN(weightValue) ||
+        heightValue <= 0 ||
+        weightValue <= 0
+      ) {
+        results.classList.add('text-red-500');
+        results.innerHTML = 'Please enter valid numeric values!!'
+
+        setTimeout(() => {
+          results.classList.remove("text-red-500")
+          results.innerHTML = ''
+        }, 3000)
+        return
+      } 
+
+      const bmi = (weightValue / (heightValue / 100) ** 2).toFixed(2)
+      results.classList.remove("text-red-500","text-lime-500","text-yellow-500");
+      const categories = [
+        {
+          limit: 18.6,
+          message: `BMI: ${bmi} <br>Skinny! - EAT MORE 🕴!!`,
+          class: 'text-yellow-500'
+        },
+        {
+          limit: 24.9,
+          message: `BMI: ${bmi} <br>CONGRATS!! Normie💪!!`,
+          class: 'text-lime-500'
+        },
+        {
+          limit: Infinity,
+          message: `BMI: ${bmi} <br>Fatty! Go for a Swim 🏊‍♀️`,
+          class: 'text-red-500'
+        }
+      ]
+
+      const { message, class: colorClass } = categories.find(c => bmi < c.limit) // destructure
+      results.classList.add(colorClass)
+      results.innerHTML = message
+    })
+  </script>
+</html>
