@@ -11,6 +11,25 @@ let isEditing = false;
 
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
+//function to limit words in the project name
+function enforceWordLimit(element, maxWords = 5, maxCharsPerWord = 10) {
+  element.addEventListener("input", function () {
+    let words = this.value.trim().split(/\s+/);
+
+    words = words.map(word => word.length > maxCharsPerWord ? word.slice(0, maxCharsPerWord) : word);
+
+    if (words.length > maxWords) {
+      words = words.slice(0, maxWords);
+    }
+
+    this.value = words.join(" ");
+  });
+}
+
+pName.addEventListener("input", function(){
+  enforceWordLimit(pName, 4);
+})
+
 function toggleEdit(row, isEditing) {
   row.querySelector('.view-mode').classList.toggle('hidden', isEditing);
   row.querySelector('.edit-mode').classList.toggle('hidden', !isEditing);
@@ -23,21 +42,38 @@ function toggleEdit(row, isEditing) {
       if (!row.contains(btn)) btn.disabled = true;
     })
     nameCell.contentEditable = true;
-    nameCell.classList.add("truncate", "w-full", "whitespace-nowrap");
+    nameCell.classList.add("truncate", "max-w-[150px]", "whitespace-nowrap");
     nameCell.focus();
+    enforceWordLimit(nameCell, 5);
 
-    // Prevent Enter key from adding a new line
     nameCell.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         nameCell.blur();
       }
     });
+
+    const currentStatus = statusCell.textContent.trim();
+    const select = document.createElement("select");
+    select.classList.add("border-b-2","outline-0", "bg-gray-800", "rounded-lg", "p-2", "text-white" ,"block");
+    select.innerHTML = `
+      <option value="Pending">Pending</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    `;
+    select.value = currentStatus;
+    statusCell.innerHTML = "";
+    statusCell.appendChild(select);
     
   } else {
     document.querySelectorAll(".edit-button, .delete-button").forEach((btn) => btn.disabled = false)
     nameCell.contentEditable = false;
     nameCell.classList.remove("truncate", "w-full", "whitespace-nowrap");
+    const select = statusCell.querySelector("select");
+    if (select) {
+      statusCell.textContent = select.value;
+    }
+
   }
 }
 
@@ -60,12 +96,12 @@ function displayProjects() {
     .map((obj, index) => `
       <tr class="border-b-1 border-gray-400" data-id="${obj.id}">
         <td class="text-center p-2">${index + 1}.</td>
-        <td class="text-center p-2">
+        <td class="text-center p-2 w-36 overflow-hidden max-w-[150px]">
           <a href="${obj.link}" class="p-2 hover:bg-gray-200/20 rounded-md cursor-pointer block w-full h-full font-semibold">
             ${obj.name}
           </a>
         </td>
-        <td class="text-center p-2">${obj.status}</td>
+        <td class="text-center w-36 h-15 p-2">${obj.status}</td>
         <td class="flex justify-center items-center p-2">
   <div class="view-mode flex gap-2">
     <button type="button" class="edit-button cursor-pointer flex items-center justify-center w-10 h-10 rounded-lg">
@@ -98,6 +134,7 @@ function displayProjects() {
     `)
     .join("");
 }
+
 
 
 
@@ -158,32 +195,35 @@ document.addEventListener("DOMContentLoaded", () => {
   tableBody.addEventListener("click", (event) => {
     const row = event.target.closest("tr");
     if (!row) return;
-    // const projectId = row.getAttribute("data-id");// old way of getting data-id
-    const projectId = Number(row.dataset.id);// works the same as above and it is modern
+    const projectId = Number(row.dataset.id);
     const project = projects.find((project) => project.id === projectId);
     if (!project) return;   
 
     if (event.target.closest(".delete-button")) {
-      if (row) row.remove();
+      projects = projects.filter((p) => p.id !== projectId);
+      row.remove();
       saveProjects();
       displayProjects();
     }
     if (event.target.closest(".edit-button")) {
       toggleEdit(row, true);
-      row.dataset.originalName = project.name; // Store original name
-      // row.dataset.originalStatus = project.status; // Store original status
+      row.dataset.originalName = project.name; 
+      row.dataset.originalStatus = project.status; 
     }
     if (event.target.closest(".cancel-button")) {
       toggleEdit(row, false);
-      project.name = row.dataset.originalName; // Restore original name
-      // project.status = row.dataset.originalStatus; // Restore original status
+      project.name = row.dataset.originalName; 
+      project.status = row.dataset.originalStatus;
       displayProjects();
     }
     if (event.target.closest(".save-button")) {
       const nameCell = row.querySelector('td:nth-child(2) a');
+      const statusCell = row.querySelector('td:nth-child(3)');
       const updatedName = nameCell.textContent.trim();
+      const updatedStatus = statusCell.querySelector("select").value;
 
         project.name = updatedName;
+        project.status = updatedStatus;
         saveProjects();
         displayProjects();
         toggleEdit(row, false);
@@ -212,7 +252,7 @@ window.addEventListener("load", function () {
   testElement.className = "hidden";
   document.body.appendChild(testElement);
 
-  const isTailwindLoaded = getComputedStyle(testElement).display === "none";// Get computed styles is mainly used for retreving css properties
+  const isTailwindLoaded = getComputedStyle(testElement).display === "none";
   document.body.removeChild(testElement);
 
   if (!isTailwindLoaded) {
