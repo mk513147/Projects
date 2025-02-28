@@ -12,9 +12,11 @@ Below is a list of the projects along with their descriptions:
 
 | Project Name | Description |
 |-------------|------------|
-| Project 1   | Description of what this project does. |
-| Project 2   | Description of what this project does. |
-| Project 3   | Description of what this project does. |
+| Main            | Displays the list of projects and lets you to navigate through the projects.  |
+| Bmi Calculator  | Calculates your Body Mass Index. |
+| Clock           | A simple Analog and Digital Clock. |
+| Guess Game      | Guess an number within 10 chances to win. (Try the other mode ^-~ ) |
+| Colour Picker   | Displays different shades of colours of your choice and lets you COPY the colour codes in any type(RGB, HEX, HSL) |
 
 *(I will update this section as I add more projects.)*  
 
