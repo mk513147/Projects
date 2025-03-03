@@ -11,68 +11,66 @@ let isEditing = false;
 
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
-//function to limit words in the project name
+// Function to limit words in the project name
 function enforceWordLimit(element, maxWords = 5, maxCharsPerWord = 10) {
   element.addEventListener("input", function () {
     let words = this.value.trim().split(/\s+/);
 
-    words = words.map(word => word.length > maxCharsPerWord ? word.slice(0, maxCharsPerWord) : word);
+    words = words.map(word =>
+      word.length > maxCharsPerWord ? word.slice(0, maxCharsPerWord) : word
+    );
 
     if (words.length > maxWords) {
       words = words.slice(0, maxWords);
     }
 
-    this.value = words.join(" ");
+    let cursorPosition = this.selectionStart;
+    this.value = words.join(" ") + (this.value.endsWith(" ") ? " " : "");
+
+    this.setSelectionRange(cursorPosition, cursorPosition);
   });
 }
 
-pName.addEventListener("input", function(){
-  enforceWordLimit(pName, 4);
-})
+enforceWordLimit(pName, 3);
+
 
 function toggleEdit(row, isEditing) {
   row.querySelector('.view-mode').classList.toggle('hidden', isEditing);
   row.querySelector('.edit-mode').classList.toggle('hidden', !isEditing);
 
   const nameCell = row.querySelector('td:nth-child(2) a');
-  const statusCell = row.querySelector('td:nth-child(3)');
 
   if (isEditing) {
     document.querySelectorAll(".edit-button, .delete-button").forEach((btn) => {
       if (!row.contains(btn)) btn.disabled = true;
-    })
-    nameCell.contentEditable = true;
-    nameCell.classList.add("truncate", "max-w-[150px]", "whitespace-nowrap");
-    nameCell.focus();
-    enforceWordLimit(nameCell, 5);
-
-    nameCell.addEventListener("keydown", (e) => {
+    });
+  
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = nameCell.innerText;
+    input.classList.add("border-b-2", "outline-0", "bg-gray-800", "rounded-lg", "p-2", "text-white", "w-full", "h-full");
+    nameCell.classList.remove("hover:bg-gray-200/20");
+    nameCell.innerHTML = "";
+    nameCell.appendChild(input);
+    input.focus();
+  
+    enforceWordLimit(input, 3);
+  
+    input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        nameCell.blur();
+        nameCell.innerText = input.value;
       }
     });
 
-    const currentStatus = statusCell.textContent.trim();
-    const select = document.createElement("select");
-    select.classList.add("border-b-2","outline-0", "bg-gray-800", "rounded-lg", "p-2", "text-white" ,"block");
-    select.innerHTML = `
-      <option value="Pending">Pending</option>
-      <option value="In Progress">In Progress</option>
-      <option value="Completed">Completed</option>
-    `;
-    select.value = currentStatus;
-    statusCell.innerHTML = "";
-    statusCell.appendChild(select);
-    
+    input.addEventListener("blur", () => {
+      nameCell.innerText = input.value;
+    });
+
+
   } else {
     document.querySelectorAll(".edit-button, .delete-button").forEach((btn) => btn.disabled = false)
-    nameCell.contentEditable = false;
-    nameCell.classList.remove("truncate", "w-full", "whitespace-nowrap");
-    const select = statusCell.querySelector("select");
-    if (select) {
-      statusCell.textContent = select.value;
-    }
+    nameCell.classList.add("hover:bg-gray-200/20");
 
   }
 }
@@ -96,12 +94,21 @@ function displayProjects() {
     .map((obj, index) => `
       <tr class="border-b-1 border-gray-400" data-id="${obj.id}">
         <td class="text-center p-2">${index + 1}.</td>
-        <td class="text-center p-2 w-36 overflow-hidden max-w-[150px]">
-          <a href="${obj.link}" class="p-2 hover:bg-gray-200/20 rounded-md cursor-pointer block w-full h-full font-semibold">
+        <td class="text-center p-2 overflow-hidden max-w-[150px]">
+          <a href="${obj.link}" class="p-2 w-36 h-15 hover:bg-gray-200/20 rounded-md cursor-pointer block w-full h-full font-semibold">
             ${obj.name}
           </a>
         </td>
-        <td class="text-center w-36 h-15 p-2">${obj.status}</td>
+       <td class="text-center w-36 p-2">
+          <select
+            class="status-select outline-0 bg-gray-900 rounded-lg p-2 text-white w-full"
+            data-id="${obj.id}"
+          >
+            <option value="pending" ${obj.status === "pending" ? "selected" : ""}>Pending</option>
+            <option value="working" ${obj.status === "working" ? "selected" : ""}>In Progress</option>
+            <option value="completed" ${obj.status === "completed" ? "selected" : ""}>Completed</option>
+          </select>
+        </td>
         <td class="flex justify-center items-center p-2">
   <div class="view-mode flex gap-2">
     <button type="button" class="edit-button cursor-pointer flex items-center justify-center w-10 h-10 rounded-lg">
@@ -136,6 +143,20 @@ function displayProjects() {
 }
 
 
+
+// Function to update localStorage when status changes
+function updateStatus(event) {
+  const projectId = event.target.dataset.id;
+  const newStatus = event.target.value;
+
+  // Update projects array
+  const projectIndex = projects.findIndex((p) => p.id == projectId);
+  if (projectIndex !== -1) {
+    projects[projectIndex].status = newStatus;
+    saveProjects();
+    displayProjects();
+  }
+}
 
 
 //function to get link from the files input
@@ -190,14 +211,14 @@ closeModalBtn.addEventListener("click", () => {
 });
 
 
-//delete/edit function use event propogation as the table loads dynamically
+//delete/edit function use event delegation as the table loads dynamically
 document.addEventListener("DOMContentLoaded", () => {
   tableBody.addEventListener("click", (event) => {
     const row = event.target.closest("tr");
     if (!row) return;
     const projectId = Number(row.dataset.id);
     const project = projects.find((project) => project.id === projectId);
-    if (!project) return;   
+    if (!project) return;
 
     if (event.target.closest(".delete-button")) {
       projects = projects.filter((p) => p.id !== projectId);
@@ -207,28 +228,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (event.target.closest(".edit-button")) {
       toggleEdit(row, true);
-      row.dataset.originalName = project.name; 
-      row.dataset.originalStatus = project.status; 
+      row.dataset.originalName = project.name;
     }
     if (event.target.closest(".cancel-button")) {
       toggleEdit(row, false);
-      project.name = row.dataset.originalName; 
-      project.status = row.dataset.originalStatus;
+      project.name = row.dataset.originalName;
       displayProjects();
     }
     if (event.target.closest(".save-button")) {
       const nameCell = row.querySelector('td:nth-child(2) a');
-      const statusCell = row.querySelector('td:nth-child(3)');
       const updatedName = nameCell.textContent.trim();
-      const updatedStatus = statusCell.querySelector("select").value;
 
-        project.name = updatedName;
-        project.status = updatedStatus;
-        saveProjects();
-        displayProjects();
-        toggleEdit(row, false);
+      project.name = updatedName;
+      saveProjects();
+      displayProjects();
+      toggleEdit(row, false);
 
     }
+  // **Event delegation for status changes**
+  tableBody.addEventListener("change", (event) => {
+    if (event.target.classList.contains("status-select")) {
+      updateStatus(event);
+    }
+  });
   });
 });
 

@@ -79,7 +79,7 @@ const indianSlangs = [
     "Ek number", // Top-notch or awesome
     "Do kaudi ka aadmi", // Worthless person
     "Khichdi pak rahi hai", // Something’s brewing (usually a scheme)
-    "Baap re baap", // Expressing shock
+    "Chutiya Sala", // Expressing shock
     "Chor hai tu", // You’re a thief (playfully)
     "Fenk mat", // Don’t exaggerate
     "Meter down", // Someone getting angry
