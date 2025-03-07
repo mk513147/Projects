@@ -119,7 +119,6 @@ const indianSlangs = [
 ];
 
 
-
 let compGuess = parseInt(Math.random() * 100 + 1)
 let guessArray = [];
 let guessNum = 1;

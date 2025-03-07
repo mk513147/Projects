@@ -108,13 +108,18 @@
           class: 'text-lime-500'
         },
         {
-          limit: Infinity,
+          limit: 50,
           message: `BMI: ${bmi} <br>Fatty! Go for a Swim 🏊‍♀️`,
           class: 'text-red-500'
+        },
+        {
+          message: `error`,
+          class: 'text-red-500'
         }
+
       ]
 
-      const { message, class: colorClass } = categories.find(c => bmi < c.limit) // destructure
+      const { message, class: colorClass } = categories.find(c => bmi < c.limit)?categories.find(c => bmi < c.limit):categories[3];
       results.classList.add(colorClass)
       results.innerHTML = message
     })

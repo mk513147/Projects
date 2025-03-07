@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Typing Test</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="../common.css">
 </head>
 <body>
     <body
-    class="bg-gray-900 text-white flex flex-col justify-center items-center"
+    class="bg-gray-900 w-screen min-h-screen box-border m-0 p-0 text-white funnel overflow-hidden"
   >
-    <header>
+    <header >
       <div class="flex justify-center items-center m-3">
         <a
           href="../index.html"
@@ -19,5 +20,20 @@
         >
       </div>
     </header>
+    <main class="flex flex-col justify-center items-center p-1 my-2 ">
+      <div id="timer" class="border border-blue-500 my-2 p-2 text-center text-gray-300 text-xl md:text-3xl sirin tracking-widest">00:00</div>
+      <p id="para" class="border border-lime-500 my-2 w-1/2 p-2  w-3/4 h-16 text-2xl md:text-5xl overflow-hidden whitespace-nowrap">Demo para for the test.</p>
+      <button
+          type="button"
+          class="bg-slate-200/40 w-40 h-12 mt-5 text-xl text-gray-100 border-2 border-white rounded-lg hover:bg-slate-200/30"
+          id="restartBtn"
+        >
+          Restart
+        </button>
+    </main>
+    <footer class="flex justify-center items-center border-green-500 p-1 mt-2">
+      <p id="footerPara" class="text-gray-300 text-xl md:text-3xl">Type to start the test</p>
+    </footer>
 </body>
+<script src="./typing.js"></script>
 </html>

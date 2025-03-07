@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital@0;1&family=Sirin+Stencil&display=swap');
+
+.funnel {
+    font-family: "Funnel Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .sirin {
+    font-family: "Sirin Stencil", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
