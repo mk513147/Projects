@@ -12,17 +12,12 @@ let time = 0;
 let typingStarted = false;
 let index = 0;
 let timer;
+let wpm = 0;
 para.innerHTML = typingTestParagraphs[0].split('').map(char => `<span>${char}</span>`).join('');
 const spans = para.querySelectorAll('span');
 
 function typingHandler(e) {
-    if (testOver || index >= typingTestParagraphs[0].length) {
-        clearInterval(timer);
-        const wpm = Math.round((index / 5) / (time / 60));
-        displayResult(`Typing speed: ${wpm} WPM`);
-        testOver = true;
-        return;
-    }
+    if (testOver) return;
 
     if (e.key.length === 1) {
         if (e.key === typingTestParagraphs[0][index]) {
@@ -33,12 +28,23 @@ function typingHandler(e) {
             spans[index].classList.add("text-red-400");
         }
         index++;
+
+        if (index >= typingTestParagraphs[0].length) {
+            clearInterval(timer);
+            testOver = true;
+            wpm = Math.round((index / 5) / (time / 60));
+            displayResult(`Typing speed: ${wpm} WPM`);
+        }
     } else if (e.key === "Backspace" && index > 0) {
         index--;
         spans[index].classList.remove("text-green-400", "text-red-400");
         spans[index].classList.add("text-white");
     }
+    wpm = Math.round((index / 5) / (time / 60));
 
+    if (time > 0) {
+        wpm = Math.round((index / 5) / (time / 60));
+    }
 }
 
 function displayResult(msg = "Time's up!") {
@@ -52,7 +58,8 @@ function startTimer() {
         if (time === 10) {
             clearInterval(timer);
             testOver = true;
-            displayResult();
+            document.body.removeEventListener('keydown', typingHandler);
+            displayResult(`Time's up! Test over.\n WPM: ${wpm}`);
         }
     }, 1000);
 }
@@ -66,16 +73,30 @@ function initialKeyHandler(e) {
     }
 }
 
+
 function restartTest() {
     clearInterval(timer);
     testOver = false;
     typingStarted = false;
     time = 0;
     index = 0;
+    wpm = 0;
     displayTime.textContent = "00:00";
     resultPara.textContent = "";
+    spans.forEach(span => {
+        span.classList.remove("text-green-400", "text-red-400");
+        span.classList.add("text-white");
+    });
+    document.body.removeEventListener('keydown', typingHandler);
+    document.body.removeEventListener('keydown', initialKeyHandler);
 
     document.body.addEventListener('keydown', initialKeyHandler);
+
+    console.log("Test restarted: Ready for new typing test.");
+    restartBtn.blur();
+
 }
+restartTest();
 
 restartBtn.addEventListener('click', restartTest);
+
