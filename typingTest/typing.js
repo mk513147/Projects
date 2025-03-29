@@ -12,39 +12,73 @@ let time = 0;
 let typingStarted = false;
 let index = 0;
 let timer;
+let correctChars = 0;
+let totalTyped = 0;
 let wpm = 0;
-para.innerHTML = typingTestParagraphs[0].split('').map(char => `<span>${char}</span>`).join('');
+let accuracy = 100;
+
+para.innerHTML = typingTestParagraphs[0].split('').map(char => `<span class="text-white">${char}</span>`).join('');
 const spans = para.querySelectorAll('span');
+let letterWidth = 12;
+
+function shiftText(index) {
+    para.style.transform = `translateX(-${index * letterWidth}px)`;
+}
 
 function typingHandler(e) {
     if (testOver) return;
 
+    if (!typingStarted && e.key === typingTestParagraphs[0][index]) {
+        typingStarted = true;
+        startTimer();
+    }
+
     if (e.key.length === 1) {
+        totalTyped++;
+
         if (e.key === typingTestParagraphs[0][index]) {
-            spans[index].classList.remove("text-white");
+            spans[index].classList.remove("text-white", "text-red-400");
             spans[index].classList.add("text-green-400");
+            correctChars++;
         } else {
             spans[index].classList.remove("text-white");
             spans[index].classList.add("text-red-400");
         }
+
         index++;
 
         if (index >= typingTestParagraphs[0].length) {
-            clearInterval(timer);
-            testOver = true;
-            wpm = Math.round((index / 5) / (time / 60));
-            displayResult(`Typing speed: ${wpm} WPM`);
+            endTest();
         }
-    } else if (e.key === "Backspace" && index > 0) {
+        shiftText(index);
+    }
+    else if (e.key === "Backspace" && index > 0) {
         index--;
         spans[index].classList.remove("text-green-400", "text-red-400");
         spans[index].classList.add("text-white");
-    }
-    wpm = Math.round((index / 5) / (time / 60));
+        totalTyped--;
 
-    if (time > 0) {
-        wpm = Math.round((index / 5) / (time / 60));
+        if (spans[index].classList.contains("text-green-400")) {
+            correctChars--;
+        }
+        shiftText(index);
     }
+
+    updateStats();
+}
+
+function updateStats() {
+    if (time > 0) {
+        wpm = Math.round((correctChars / 5) / (time / 60));
+        accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 100;
+    }
+}
+
+function endTest() {
+    clearInterval(timer);
+    testOver = true;
+    updateStats();
+    displayResult(`Typing speed: ${wpm} WPM | Accuracy: ${accuracy}%`);
 }
 
 function displayResult(msg = "Time's up!") {
@@ -55,42 +89,34 @@ function startTimer() {
     timer = setInterval(() => {
         time++;
         displayTime.textContent = `00:${time < 10 ? '0' + time : time}`;
-        if (time === 10) {
-            clearInterval(timer);
-            testOver = true;
-            document.body.removeEventListener('keydown', typingHandler);
-            displayResult(`Time's up! Test over.\n WPM: ${wpm}`);
+        if (time === 60) {
+            endTest();
         }
     }, 1000);
 }
 
-function initialKeyHandler(e) {
-    if (!typingStarted && e.key.length === 1) {
-        typingStarted = true;
-        startTimer();
-        document.body.addEventListener('keydown', typingHandler);
-        document.body.removeEventListener('keydown', initialKeyHandler);
-    }
-}
-
+document.body.addEventListener('keydown', typingHandler);
 
 function restartTest() {
     clearInterval(timer);
     testOver = false;
-    typingStarted = false;
     time = 0;
+    typingStarted = false;
     index = 0;
+    timer;
+    correctChars = 0;
+    totalTyped = 0;
     wpm = 0;
+    accuracy = 100;
     displayTime.textContent = "00:00";
     resultPara.textContent = "";
+    shiftText(0);
     spans.forEach(span => {
         span.classList.remove("text-green-400", "text-red-400");
         span.classList.add("text-white");
     });
     document.body.removeEventListener('keydown', typingHandler);
-    document.body.removeEventListener('keydown', initialKeyHandler);
-
-    document.body.addEventListener('keydown', initialKeyHandler);
+    document.body.addEventListener('keydown', typingHandler);
 
     console.log("Test restarted: Ready for new typing test.");
     restartBtn.blur();
