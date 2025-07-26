@@ -9,9 +9,9 @@ const toggleSwitch = document.getElementById('toggleSwitch');
 let para = document.querySelectorAll(".resultPara");
 
 const indianSlangs = [
-    "Arre yaar", 
-    "Bsdk", 
-    "Jugaad", 
+    "Arre yaar",
+    "Bsdk",
+    "Jugaad",
     "Chillauta", // Relax
     "Kaandu", // A big mess or problem
     "Fattu", // Coward
@@ -133,7 +133,7 @@ toggleSwitch.addEventListener('change', () => {
     })
     displayComment("")
     if (insult) {
-        heading.textContent="GASS GAME"
+        heading.textContent = "GASS GAME"
     } else {
         heading.textContent = "GUESS GAME"
     }
@@ -151,13 +151,14 @@ function validate(guessedNum) {
     if (guessedNum <= 0 || isNaN(guessedNum) || guessedNum >= 100) {
         comment.style.color = "red";
         comment.textContent = "Please enter a valid number between 1-100"
+        userInput.value = "";
         setTimeout(() => {
             comment.style.color = "";
             comment.textContent = "";
         }, 2000);
     } else {
         if (insult) {
-            displayComment(indianSlangs[guessedNum+1])
+            displayComment(indianSlangs[guessedNum + 1])
             userInput.value = "";
         }
         else {
