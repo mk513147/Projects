@@ -6,21 +6,38 @@
 //     time.innerText = date.toLocaleTimeString()
 // }, 1000)
 
-// //For Digital Clock
-// setInterval(() => {
-//     let d = new Date();
-//     let htime = d.getHours();
-//     let mtime = d.getMinutes();
-//     let stime = d.getSeconds();
-//     // mstime = d.getMilliseconds();
+const container = document.getElementById("clock-container");
+const centerVW = 20;
+const radiusVW = 18.5;
 
-//     hrotation = 30 * htime + mtime / 2;// hour hand rotation
-//     mrotation = 6 * mtime;// minute hand rotation
-//     srotation = 6 * stime;// second hand rotation
-//     // msrotation = (36/100) * mstime  ;// millisecond rotation
+for (let i = 0; i < 60; i++) {
+    const angle = ((i * 6) - 90) * (Math.PI / 180); // -90° to place 00 at top
+    const x = centerVW + radiusVW * Math.cos(angle);
+    const y = centerVW + radiusVW * Math.sin(angle);
 
-//     hour.style.transform = ` rotate(${hrotation}deg)`;
-//     minute.style.transform = ` rotate(${mrotation}deg)`;
-//     second.style.transform = ` rotate(${srotation}deg)`;
-//     // millisec.style.transform = ` rotate(${msrotation}deg)`;
-// }, 1000);
+    const numberDiv = document.createElement("div");
+    numberDiv.classList.add("number");
+    numberDiv.style.left = `${x}vw`;
+    numberDiv.style.top = `${y}vw`;
+    numberDiv.innerText = i.toString().padStart(2, '0');
+
+    container.appendChild(numberDiv);
+}
+
+const innerContainer = document.getElementById("inner-container");
+const innerCenterVW = 17.5;
+const innerRadiusVW = 16;
+
+for (let i = 1; i <= 12; i++) {
+    const angle = (i * 30 - 90) * (Math.PI / 180);
+    const a = innerCenterVW + innerRadiusVW * Math.cos(angle);
+    const b = innerCenterVW + innerRadiusVW * Math.sin(angle);
+
+    const innernumberDiv = document.createElement("div");
+    innernumberDiv.classList.add("number");
+    innernumberDiv.style.left = `${a}vw`;
+    innernumberDiv.style.top = `${b}vw`;
+    innernumberDiv.innerText = i;
+
+    innerContainer.appendChild(innernumberDiv);
+}

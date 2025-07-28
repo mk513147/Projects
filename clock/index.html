@@ -5,7 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Clock</title>
 		<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-		<link rel="stylesheet" href="styles.css" />
+		<!-- <link rel="stylesheet" href="styles.css" /> -->
+		<link rel="stylesheet" href="styles2.css" />
 		<link rel="stylesheet" href="../common.css" />
 	</head>
 	<body
@@ -35,20 +36,11 @@
 				</a>
 			</div>
 		</header>
-		<main class="border border-blue-500 border-4">
-			<!-- Analog clock -->
-			<div id="clock-container" class="mt-8">
-				<div id="hour"></div>
-				<div id="minute"></div>
-				<div id="second"></div>
-			</div>
-			<!-- Digital Clock -->
-			<div class="flex flex-col justify-center mt-8 items-center gap-2">
-				<p
-					id="time"
-					class="p-3 text-xl bg-amber-500 text-white text-center rounded-md"
-				></p>
-			</div>
+		<main
+			class="border border-blue-500 border-4 flex justify-center items-center"
+		>
+			<div id="clock-container"></div>
+			<div id="inner-container"></div>
 		</main>
 	</body>
 	<script src="scripts.js"></script>
