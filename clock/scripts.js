@@ -1,9 +1,11 @@
-// let time = document.getElementById('time')
+let date = new Date();
+const day = Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
+document.getElementById('day-container').innerText = day.toUpperCase();
 
-// //For Analog clock
+//For Analog clock
 // setInterval(function () {
 //     let date = new Date();
-//     time.innerText = date.toLocaleTimeString()
+//     day.innerText = date.toLocaleTimeString()
 // }, 1000)
 
 const container = document.getElementById("clock-container");
@@ -23,6 +25,16 @@ for (let i = 0; i < 60; i++) {
 
     container.appendChild(numberDiv);
 }
+let rotation = 0;
+
+setInterval(function () {
+    rotation += 6; // add 6 degrees every minute
+    container.style.transform = `rotate(${rotation}deg)`;
+    const numbers = container.querySelectorAll(".number");
+    numbers.forEach(el => {
+        el.style.transform = `translate(-50%, -50%) rotate(${-rotation}deg)`;
+    });
+}, 1000); // 60000 ms = 1 minute
 
 const innerContainer = document.getElementById("inner-container");
 const innerCenterVW = 17.5;
